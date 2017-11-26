@@ -15,6 +15,7 @@
  */
 package com.example.android.pets;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -52,6 +53,12 @@ public class CatalogActivity extends AppCompatActivity {
             }
         });
         mDbHelper = new PetDbHelper(this);
+        displayDatabaseInfo();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         displayDatabaseInfo();
     }
 
@@ -107,9 +114,20 @@ public class CatalogActivity extends AppCompatActivity {
 
     private void insetPets() {
 
-        
+        // Gets the database in write mode
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
+
+        // Create a ContentValues object where column names are the keys,
+        // and Toto's pet attributes are the values.
+        ContentValues values = new ContentValues();
+        values.put(PetEntry.COLUMN_PET_NAME, "TOTO");
+        values.put(PetEntry.COLUMN_PET_BREED, "Terrier");
+        values.put(PetEntry.COLUMN_PET_GENDER, PetEntry.GENDER_MALE);
+        values.put(PetEntry.COLUMN_PET_WEIGHT, 7);
+
+        // The third argument is the ContentValues object containing the info for Toto.
+        long newRowId = db.insert(PetEntry.TABLE_NAME, null, values);
 
     }
 }
